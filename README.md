@@ -1,4 +1,4 @@
-# SQL-Queary : [MID_LAB_TEST](https://drive.google.com/file/d/1wG6IMbRun0x4uezXA8THgADm62Bavfwf/view?usp=sharing).
+# SQL-Queary : [MID_LAB_TEST](https://drive.google.com/file/d/1wG6IMbRun0x4uezXA8THgADm62Bavfwf/view?usp=sharing).[Query in pdf](https://drive.google.com/file/d/1wG6IMbRun0x4uezXA8THgADm62Bavfwf/view?usp=sharing)
 ### Employee Table:
 ```
 CREATE TABLE Employee_Account (
