@@ -171,3 +171,96 @@ FROM Employee_Account e
 JOIN Project_Assignment p
 ON e.Emp_Name = p.Emp_Name
 WHERE e.City = 'Dhaka';
+## ADVANCED / UNIQUE SQL QUERIES
+# Top 2 Highest Paid Employees
+SELECT *
+FROM Employee_Account
+ORDER BY Salary DESC
+LIMIT 2;
+# Second Highest Salary (INTERVIEW FAMOUS)
+SELECT MAX(Salary) AS Second_Highest
+FROM Employee_Account
+WHERE Salary < (SELECT MAX(Salary) FROM Employee_Account);
+
+# Department-wise Highest Salary
+SELECT Department, MAX(Salary) AS Highest_Salary
+FROM Employee_Account
+GROUP BY Department;
+# Employees who earn more than their manager 
+SELECT *
+FROM Employee_Account e
+WHERE Salary > (
+    SELECT AVG(Salary)
+    FROM Employee_Account
+    WHERE Department = e.Department
+);
+# Employees who have NO project (IMPORTANT)
+SELECT *
+FROM Employee_Account e
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Project_Assignment p
+    WHERE e.Emp_Name = p.Emp_Name
+);
+# Employees working on more than 1 project
+SELECT Emp_Name, COUNT(*) AS Total_Project
+FROM Project_Assignment
+GROUP BY Emp_Name
+HAVING COUNT(*) > 1;
+# Department with highest total salary
+SELECT Department
+FROM Employee_Account
+GROUP BY Department
+ORDER BY SUM(Salary) DESC
+LIMIT 1;
+# Employees whose salary is above department average AND have project
+SELECT *
+FROM Employee_Account e
+WHERE Salary > (
+    SELECT AVG(Salary)
+    FROM Employee_Account
+    WHERE Department = e.Department
+)
+AND EXISTS (
+    SELECT 1
+    FROM Project_Assignment p
+    WHERE e.Emp_Name = p.Emp_Name
+);
+# Find duplicate city employees
+SELECT City, COUNT(*) AS Total
+FROM Employee_Account
+GROUP BY City
+HAVING COUNT(*) > 1;
+# Show salary category (CASE statement 🔥)
+SELECT Emp_Name, Salary,
+CASE 
+    WHEN Salary >= 80000 THEN 'High'
+    WHEN Salary >= 50000 THEN 'Medium'
+    ELSE 'Low'
+END AS Salary_Level
+FROM Employee_Account;
+# Rank employees by salary (ADVANCED ⭐)
+SELECT Emp_Name, Salary,
+RANK() OVER (ORDER BY Salary DESC) AS Rank_Position
+FROM Employee_Account;
+# Employees earning more than ALL HR employees
+SELECT *
+FROM Employee_Account
+WHERE Salary > ALL (
+    SELECT Salary
+    FROM Employee_Account
+    WHERE Department = 'HR'
+);
+# Find employees working in same city AND same project type
+SELECT e.Emp_Name, p.Project_Type, e.City
+FROM Employee_Account e
+JOIN Project_Assignment p
+ON e.Emp_Name = p.Emp_Name
+WHERE e.City = p.City;
+# Employees whose name length is maximum
+SELECT *
+FROM Employee_Account
+WHERE LENGTH(Emp_Name) = (
+    SELECT MAX(LENGTH(Emp_Name))
+    FROM Employee_Account
+);
